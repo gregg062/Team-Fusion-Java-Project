@@ -1,7 +1,7 @@
 package quiz.model.util.db;
 
 import java.sql.*;
-import java.util.Map;
+import java.util.HashMap;
 
 import quiz.model.Admin;
 import quiz.model.Instructor;
@@ -75,8 +75,8 @@ public abstract class DBConnector {
 	    return user; 
 	}
 	
-	public static Map<String, User> getUserList(){
-		Map<String, User> userList = null;
+	public static HashMap<String, User> getUserList(){
+		HashMap<String, User> userList = new HashMap<String, User>();
 	    try{
 			Connection conn = openDBConn();
 		 
@@ -96,7 +96,7 @@ public abstract class DBConnector {
 		        }else{
 		        	user = new Student(id, userlevel, username);
 		        }
-		        userList.put("username", user);
+		        userList.put(username, user);
 	        }
 	         
 	        rs.close();

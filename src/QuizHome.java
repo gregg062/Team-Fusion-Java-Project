@@ -2,6 +2,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import quiz.controller.AdminController;
 import quiz.model.User;
 
 /**
@@ -49,8 +52,17 @@ public class QuizHome extends HttpServlet {
         out.println("<body>");
         if(user != null){
 	        out.println("<h3> Quiz Dashboard</h3>");
-	        out.println("<h2> Welcome, "+user.getUsername()+"</h3>");
+	        out.println("<h2> Welcome, "+user.getUsername()+"</h2>");
+	        out.println("<h1> Please fin your options below</h1>");
 	        if(user.getUserLevel() == User.ADMIN){
+	        	HashMap<String, User> userList = AdminController.getUserList();
+	        	//loop
+	        	for (Map.Entry<String, User> entry : userList.entrySet())
+    			{
+    			    System.out.println(entry.getKey() + "/" + entry.getValue());
+    			    
+    			    out.println("<p> User: "+entry.getKey().toString()+"</p>");
+    			}
 	        	
 	        }
         }else{
