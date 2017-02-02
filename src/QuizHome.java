@@ -3,6 +3,7 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -46,13 +47,17 @@ public class QuizHome extends HttpServlet {
         out.println("<title>SEN632 - Team Fusion Java Project</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println("<h3> Quiz Dashboard</h3>");
-        out.println("<h2> Welcome, "+user.getUsername()+"</h3>");
-        
-        if(user.getUserLevel() == User.ADMIN){
-        	
+        if(user != null){
+	        out.println("<h3> Quiz Dashboard</h3>");
+	        out.println("<h2> Welcome, "+user.getUsername()+"</h3>");
+	        if(user.getUserLevel() == User.ADMIN){
+	        	
+	        }
+        }else{
+        	out.println("User not logged in");
+            RequestDispatcher rs = request.getRequestDispatcher("index.html");
+            rs.include(request, response);
         }
-        
         out.println("</body>");
         out.println("</html>");
         

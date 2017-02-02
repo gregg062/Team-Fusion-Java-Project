@@ -52,6 +52,7 @@ public abstract class DBConnector {
 	        ps.setString(1, username);
 	        ps.setString(2, pass);
 	        ResultSet rs =ps.executeQuery();
+	        rs.next();
 	        int id = rs.getInt("id");
 	        int userlevel = rs.getInt("user_level");
 	        if(userlevel == User.ADMIN){
