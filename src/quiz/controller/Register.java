@@ -9,23 +9,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import quiz.model.User;
-import quiz.model.ValidateLogin;
+import quiz.model.RegisterStudent;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class Register
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/Register")
+public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public Register() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -44,21 +43,23 @@ public class Login extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
+        String name = request.getParameter("name");
         String username = request.getParameter("username");
         String pass = request.getParameter("pass");
         
-        User user = ValidateLogin.checkUser(username, pass);
-        
-        if(user != null)
+        boolean registered = RegisterStudent.registerUser(name, username, pass);
+        		
+        if(registered)
         {
-            HttpSession session=request.getSession();  
-	        session.setAttribute("user",user);
-            RequestDispatcher rs = request.getRequestDispatcher("QuizHome");
+            //HttpSession session=request.getSession();  
+	        //session.setAttribute("user",user);
+        	out.println("User registered");
+        	RequestDispatcher rs = request.getRequestDispatcher("index.html");
             rs.forward(request, response);
         }
         else
         {
-           out.println("Username or Password incorrect");
+           out.println("Error. User not registered.");
            RequestDispatcher rs = request.getRequestDispatcher("index.html");
            rs.forward(request, response);
         }

@@ -1,3 +1,4 @@
+package quiz.view;
 
 
 import java.io.IOException;
@@ -14,19 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import quiz.controller.AdminController;
+import quiz.model.Question;
 import quiz.model.User;
 
 /**
  * Servlet implementation class QuizHome
  */
-@WebServlet("/QuizHome")
-public class QuizHome extends HttpServlet {
+@WebServlet("/InstructorHome")
+public class InstructorHome extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public QuizHome() {
+    public InstructorHome() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -54,23 +56,24 @@ public class QuizHome extends HttpServlet {
 	        out.println("<h3> Quiz Dashboard</h3>");
 	        out.println("<h2> Welcome, "+user.getUsername()+"</h2>");
 	        out.println("<h1> Please find your options below</h1>");
-	        if(user.getUserLevel() == User.ADMIN){
-	        	HashMap<String, User> userList = AdminController.getUserList();
-	        	//loop
-	        	for (Map.Entry<String, User> entry : userList.entrySet())
-    			{
-    			    System.out.println(entry.getKey() + "/" + entry.getValue());
-    			    
-    			    out.println("<p> User: "+entry.getKey().toString()+" <a href='DeleteUser?user_id="+((User)entry.getValue()).getId()+"'>Delete User</a> <a href='ViewScore?user_id="+((User)entry.getValue()).getId()+"'>View Score</a></p>");
-    			}
-	        	
-	        }else if(user.getUserLevel() == User.STUDENT){
-	        	 out.println("<p><a href='Quiz'>Start Quiz!</a></p>");
-	        }else if(user.getUserLevel() == User.INSTRUCTOR){
-	        	RequestDispatcher rs = request.getRequestDispatcher("InstructorHome");
-	            rs.forward(request, response);
-	            return;
-	        }
+	        
+	        out.println("<p> <a href='addquestion.html'>Add New Question</a></h1>");
+	        
+	        HashMap<String, Question> questionList = AdminController.getQuestionList();
+	        
+        	//loop
+        	for (Map.Entry<String, Question> entry : questionList.entrySet())
+			{
+			    System.out.println(entry.getKey() + "/" + entry.getValue());
+			    
+			    String prompt = ((Question)entry.getValue()).getPrompt();
+			    if(prompt.length() > 50){
+			    	out.println("<p> Question: "+entry.getKey().toString()+" ->"+((Question)entry.getValue()).getPrompt().substring(0, 49)+"... <a href='DeleteQuestion?question_id="+((Question)entry.getValue()).getQuestionID()+"'>Delete Question</a></p>");
+			    }else{
+			    	out.println("<p> Question: "+entry.getKey().toString()+" ->"+((Question)entry.getValue()).getPrompt()+"... <a href='DeleteQuestion?question_id="+((Question)entry.getValue()).getQuestionID()+"'>Delete Question</a></p>");
+			    }
+			}	
+	        
         }else{
         	out.println("User not logged in");
             RequestDispatcher rs = request.getRequestDispatcher("index.html");
@@ -90,3 +93,4 @@ public class QuizHome extends HttpServlet {
 	}
 
 }
+

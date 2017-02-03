@@ -9,23 +9,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import quiz.model.User;
-import quiz.model.ValidateLogin;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class Register
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/AddQuestion")
+public class AddQuestion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public AddQuestion() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -44,21 +41,25 @@ public class Login extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        String username = request.getParameter("username");
-        String pass = request.getParameter("pass");
+        String subject = request.getParameter("subject");
+        String prompt = request.getParameter("prompt");
+        String answer_one = request.getParameter("answer_one");
+        String answer_two = request.getParameter("answer_two");
+        String answer_three = request.getParameter("answer_three");
+        String answer_four = request.getParameter("answer_four");
+        String correct = request.getParameter("correct");
         
-        User user = ValidateLogin.checkUser(username, pass);
-        
-        if(user != null)
+        boolean added = QuizController.addQuestion(subject, prompt, answer_one, answer_two, answer_three, answer_four, correct);
+        		
+        if(added)
         {
-            HttpSession session=request.getSession();  
-	        session.setAttribute("user",user);
-            RequestDispatcher rs = request.getRequestDispatcher("QuizHome");
+        	out.println("Question added");
+        	RequestDispatcher rs = request.getRequestDispatcher("InstructorHome");
             rs.forward(request, response);
         }
         else
         {
-           out.println("Username or Password incorrect");
+           out.println("Error. Question not added.");
            RequestDispatcher rs = request.getRequestDispatcher("index.html");
            rs.forward(request, response);
         }
